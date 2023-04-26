@@ -1,7 +1,7 @@
 #include "philo.h"
 
-void *life_cycle(void *nullable)
+void	*life_cycle(void *void_philo)
 {
-	printf("1\n");
-	return (NULL);
+	t_philo *philo = (t_philo *)void_philo;
+
 }

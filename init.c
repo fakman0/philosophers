@@ -7,7 +7,6 @@ t_philo	**init(int argc, char *argv[], int i)
 	pthread_mutex_t	*mutexes;
 
 	philos = malloc(sizeof(t_philo *) * ft_atoi(argv[1]));
-	init_threads(threads, ft_atoi(argv[1]));
 	init_forks(mutexes, ft_atoi(argv[1]));
 	while (i < ft_atoi(argv[1]))
 	{
@@ -26,6 +25,7 @@ t_philo	**init(int argc, char *argv[], int i)
 		}
 		i++;
 	}
+	init_threads(threads, ft_atoi(argv[1]), philos);
 	return (philos);
 }
 
@@ -44,11 +44,12 @@ void	init_data(int argc, char *argv[], t_philo *philo, int philo_id)
 	philo->eat_time = 0;
 	philo->think_time = 0;
 	philo->sleep_time = 0;
+	philo->eating_now = 0;
 	if (argc == 6)
 		philo->must_eat = ft_atoi(argv[5]);
 }
 
-void	init_threads(pthread_t *threads, int philo_count)
+void	init_threads(pthread_t *threads, int philo_count, t_philo **philos)
 {
 	int	i;
 
@@ -56,7 +57,7 @@ void	init_threads(pthread_t *threads, int philo_count)
 	i = 0;
 	while (i < philo_count)
 	{
-		if (pthread_create(&threads[i], NULL, life_cycle, (void *) NULL))
+		if (pthread_create(&threads[i], NULL, life_cycle, philos[i]))
 			exit(printf("Error!\ncannot create threads"));
 		i++;
 	}
@@ -74,14 +75,4 @@ void	init_forks(pthread_mutex_t	*mutexes, int philo_count)
 			exit(printf("Error!\ncannot create mutex"));
 		i++;
 	}
-}
-
-int	main(int argc, char *argv[])
-{
-	t_philo	**philos;
-
-	philos = init(argc, argv, 0);
-
-	sleep(5);
-	return (0);
 }

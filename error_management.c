@@ -17,4 +17,11 @@ void	controls(int argc, char *argv[])
 		exit(printf("Error!\nWrong number of philosophers"));
 	if (ft_atoi(argv[2]) < 60 || ft_atoi(argv[3]) < 60 || ft_atoi(argv[4]) < 60)
 		exit(printf("Error!\nArguments must be minimum 60ms"));
+	if (ft_atoi(argv[1]) == 1)
+	{
+		printf("Philo 1, took the right fork\n");
+		printf("Error! Philo 1 didn't get the left fork\n");
+		usleep(ft_atoi(argv[2]) * 1000);
+		exit(printf("Philo 1 is dead"));
+	}
 }
