@@ -6,6 +6,6 @@ int	main(int argc, char *argv[])
 
 	controls(argc, argv);
 	philos = init(argc, argv, 0);
-	usleep(500);
+	sleep(100);
 	return (0);
 }
