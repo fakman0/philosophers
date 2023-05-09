@@ -30,10 +30,10 @@ typedef struct s_philo
 int		ft_atoi(char *str);
 int		ft_isnum(char *num);
 //error_management
-void	controls(int argc, char *argv[]);
+int		controls(int argc, char *argv[]);
 //life_cycle
 void	*life_cycle(void *nullable);
-void	eat(t_philo *philo);
+void	eating(t_philo *philo);
 //init
 t_philo	**init(int argc, char *argv[], int i);
 void	init_data(int argc, char *argv[], t_philo *philo, int philo_id);
@@ -44,4 +44,7 @@ void	ft_putstr_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 void	print(t_philo *philo, char opt);
 void	ft_putchar_fd(char c, int fd);
+//time
+long	get_time(void);
+void	ft_usleep(long need_to_wait);
 #endif
