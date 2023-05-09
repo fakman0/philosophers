@@ -38,9 +38,7 @@ void	init_data(int argc, char *argv[], t_philo *philo, int philo_id)
 	philo->needle_eat = ft_atoi(argv[3]);
 	philo->needle_sleep = ft_atoi(argv[4]);
 	philo->must_eat = -1;
-	philo->eat_time = 0;
-	philo->think_time = 0;
-	philo->sleep_time = 0;
+	philo->last_eat = 0;
 	philo->eating_now = 0;
 	if (argc == 6)
 		philo->must_eat = ft_atoi(argv[5]);

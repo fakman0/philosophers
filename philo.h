@@ -14,9 +14,7 @@ typedef struct s_philo
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*print_mutex;
-	__uint64_t		eat_time;
-	__uint64_t		sleep_time;
-	__uint64_t		think_time;
+	__uint64_t		last_eat;
 	__uint64_t		needle_eat;
 	__uint64_t		needle_sleep;
 	__uint64_t		time_to_die;
