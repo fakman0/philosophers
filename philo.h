@@ -34,6 +34,8 @@ int		controls(int argc, char *argv[]);
 //life_cycle
 void	*life_cycle(void *nullable);
 void	eating(t_philo *philo);
+void	thinking(t_philo *philo);
+void	sleeping(t_philo *philo);
 //init
 t_philo	**init(int argc, char *argv[], int i);
 void	init_data(int argc, char *argv[], t_philo *philo, int philo_id);
