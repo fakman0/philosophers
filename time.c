@@ -1,6 +1,6 @@
 #include "philo.h"
 
-long	get_time(void)
+__uint64_t	get_time(void)
 {
 	struct timeval	time;
 

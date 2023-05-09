@@ -6,19 +6,9 @@ void	eating(t_philo *philo)
 	pthread_mutex_lock(philo->l_fork);
 	print(philo, 'e');
 	ft_usleep(philo->needle_eat);
+	
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
-}
-
-void	thinking(t_philo *philo)
-{
-	print(philo, 't');
-}
-
-void	sleeping(t_philo *philo)
-{
-	print(philo, 's');
-	ft_usleep(philo->needle_sleep);
 }
 
 void	*life_cycle(void *void_philo)
@@ -34,8 +24,9 @@ void	*life_cycle(void *void_philo)
 	while (1)
 	{
 		eating(philo);
-		thinking(philo);
-		sleeping(philo);
+		print(philo, 't');
+		print(philo, 's');
+		ft_usleep(philo->needle_sleep);
 	}
 	return (NULL);
 }

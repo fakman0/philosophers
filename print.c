@@ -8,7 +8,8 @@ void	print(t_philo *philo, char opt)
 	pthread_mutex_lock(philo->print_mutex);
 	if (opt == 'e')
 	{
-		printf("%llu-philo %d has taken forks\n", time / 10000, philo->philo_id);
+		printf("%llu-philo %d has taken left forks\n", time / 10000, philo->philo_id);
+		printf("%llu-philo %d has taken right forks\n", time / 10000, philo->philo_id);
 		printf("%llu-philo %d is eating now\n", time / 10000, philo->philo_id);
 		philo->eating_now = 0;
 	}
