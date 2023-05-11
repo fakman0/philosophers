@@ -23,7 +23,7 @@ t_philo	**init(int argc, char *argv[], int i, int *is_done)
 		philos[i]->is_done = is_done;
 		i++;
 	}
-	init_threads(threads, ft_atoi(argv[1]), philos, argv);
+	init_threads(threads, ft_atoi(argv[1]), philos);
 	return (philos);
 }
 
@@ -47,29 +47,17 @@ void	init_data(int argc, char *argv[], t_philo *philo, int philo_id)
 		philo->must_eat = ft_atoi(argv[5]);
 }
 
-void	init_threads(pthread_t *thread, int p_count, t_philo **philos, char **a)
+void	init_threads(pthread_t *thread, int p_count, t_philo **philos)
 {
 	int			i;
-	pthread_t	dead_check;
-	t_socrates	*socrates;
 
 	i = 0;
-	socrates = malloc(sizeof(t_socrates));
-	socrates->argv = a;
-	socrates->philos = philos;
 	while (i < p_count)
 	{
-		pthread_create(&thread[i], NULL, life_cycle, philos[i]); // philos'a erişiyor
+		pthread_create(&thread[i], NULL, life_cycle, philos[i]);
 		i++;
 	}
-	pthread_create(&dead_check, NULL, finish_dinner, socrates); //socrates'ten philos'a erişiyor data race oluyor. thread ile yapma mainden öldüğünü kontrol et.
 	i = 0;
-	while (i < p_count)
-	{
-		pthread_join(*(philos[i]->philo), NULL);
-		i++;
-	}
-	pthread_join(dead_check, NULL);
 }
 
 void	init_mutexes(pthread_mutex_t *mutex, int ph_c, t_philo **ph, int i)
