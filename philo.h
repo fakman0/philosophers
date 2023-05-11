@@ -14,6 +14,7 @@ typedef struct s_philo
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*print_mutex;
+	pthread_mutex_t	*last_eat_mutex;
 	__uint64_t		last_eat;
 	__uint64_t		needle_eat;
 	__uint64_t		needle_sleep;
@@ -22,7 +23,14 @@ typedef struct s_philo
 	int				eating_now;
 	int				philo_count;
 	int				eat_count;
+	uint64_t		now;
 }				t_philo;
+
+typedef struct s_socrates
+{
+	struct s_philo	**philos;
+	char			**argv;
+}			t_socrates;
 
 //utils
 int			ft_atoi(char *str);
@@ -33,16 +41,18 @@ int			controls(int argc, char *argv[]);
 void		*life_cycle(void *nullable);
 void		eating(t_philo *philo);
 //init
-t_philo	**init(int argc, char *argv[], int i);
+t_philo		**init(int argc, char *argv[], int i);
 void		init_data(int argc, char *argv[], t_philo *philo, int philo_id);
-void		init_threads(pthread_t *threads, int philo_count, t_philo **philos);
+void		init_threads(pthread_t *t, int p_c, t_philo **philos, char **a);
 void		init_forks(pthread_mutex_t	*mutexes, int philo_count);
-void		give_forks(int i, int ph_c, t_philo **philos, pthread_mutex_t *mutexes);
+void		give_forks(int i, int ph_c, t_philo **ps, pthread_mutex_t *m);
 void		ft_putstr_fd(char *s, int fd);
 void		ft_putnbr_fd(int n, int fd);
 void		print(t_philo *philo, char opt);
 void		ft_putchar_fd(char c, int fd);
 //time
 __uint64_t	get_time(void);
-void		ft_usleep(long need_to_wait);
+void		ft_usleep(uint64_t need_to_wait);
+//main
+void		*finish_dinner(void *socrates);
 #endif

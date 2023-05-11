@@ -1,19 +1,46 @@
 #include "philo.h"
 
+void	*finish_dinner(void *socrates)
+{
+	int			i;
+	int			time;
+	int			p_count;
+	t_socrates	*data;
+
+	data = (t_socrates *)socrates;
+	p_count = ft_atoi(data->argv[1]);
+	while (1)
+	{
+		i = 0;
+		while (i < p_count)
+		{
+			pthread_mutex_lock(data->philos[i]->last_eat_mutex);
+			if (get_time() - data->philos[i]->last_eat >= ft_atoi(data->argv[2])
+				&& data->philos[i]->last_eat != 0)
+			{
+				pthread_mutex_unlock(data->philos[i]->last_eat_mutex);
+				ft_usleep(1);
+				print(data->philos[i], 'd');
+				return (NULL);
+			}
+			i++;
+		}
+	}
+	return (NULL);
+}
+
 int	main(int argc, char *argv[])
 {
-	t_philo	**philos;
+	t_philo		**philos;
+	pthread_t	dead_check;
+	int			i;
 
 	if (!controls(argc, argv))
 	{
 		printf("Error!\n");
 		return (0);
 	}
+	i = 0;
 	philos = init(argc, argv, 0);
-	while (1)
-	{
-		//Yemek yemeye başladıklarında, düşünmeye başladıklarında, uyumaya başladıklarında 
-	}
-	sleep(100);
 	return (0);
 }

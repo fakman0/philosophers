@@ -8,10 +8,10 @@ __uint64_t	get_time(void)
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-void	ft_usleep(long need_to_wait)
+void	ft_usleep(uint64_t need_to_wait)
 {
-	long	start_time;
-	long	finish_time;
+	uint64_t	start_time;
+	uint64_t	finish_time;
 
 	start_time = get_time();
 	while (1)

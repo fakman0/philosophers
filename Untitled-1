@@ -1,0 +1,4 @@
+./a.out 5 800 200 200 ölmemeli
+./a.out 4 410 200 200 ölmemeli
+./a.out 4 310 200 100 ölmeli
+./a.out 2 100 50 50 << 2lide kendin değer ver ölmeli

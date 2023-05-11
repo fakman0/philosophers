@@ -6,11 +6,13 @@ t_philo	**init(int argc, char *argv[], int i)
 	pthread_t		*threads;
 	pthread_mutex_t	*mutexes;
 	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	last_eat_mutex;
 
 	threads = malloc(sizeof(pthread_t) * ft_atoi(argv[1]));
 	mutexes = malloc(sizeof(pthread_mutex_t) * ft_atoi(argv[1]));
 	philos = malloc(sizeof(t_philo *) * ft_atoi(argv[1]));
 	pthread_mutex_init(&print_mutex, NULL);
+	pthread_mutex_init(&last_eat_mutex, NULL);
 	init_forks(mutexes, ft_atoi(argv[1]));
 	while (i < ft_atoi(argv[1]))
 	{
@@ -19,9 +21,10 @@ t_philo	**init(int argc, char *argv[], int i)
 		philos[i]->philo = &threads[i];
 		give_forks(i, ft_atoi(argv[1]), philos, mutexes);
 		philos[i]->print_mutex = &print_mutex;
+		philos[i]->last_eat_mutex = &last_eat_mutex;
 		i++;
 	}
-	init_threads(threads, ft_atoi(argv[1]), philos);
+	init_threads(threads, ft_atoi(argv[1]), philos, argv);
 	return (philos);
 }
 
@@ -40,21 +43,34 @@ void	init_data(int argc, char *argv[], t_philo *philo, int philo_id)
 	philo->must_eat = -1;
 	philo->last_eat = 0;
 	philo->eating_now = 0;
+	philo->now = get_time();
 	if (argc == 6)
 		philo->must_eat = ft_atoi(argv[5]);
 }
 
-void	init_threads(pthread_t *threads, int philo_count, t_philo **philos)
+void	init_threads(pthread_t *thread, int p_count, t_philo **philos, char **a)
 {
-	int	i;
+	int			i;
+	pthread_t	dead_check;
+	t_socrates	*socrates;
 
 	i = 0;
-	while (i < philo_count)
+	socrates = malloc(sizeof(t_socrates));
+	socrates->argv = a;
+	socrates->philos = philos;
+	while (i < p_count)
 	{
-		if (pthread_create(&threads[i], NULL, life_cycle, philos[i]))
-			exit(printf("Error!\ncannot create threads"));
+		pthread_create(&thread[i], NULL, life_cycle, philos[i]);
 		i++;
 	}
+	i = 0;
+	while (i < p_count)
+	{
+		pthread_join(*(philos[i]->philo), NULL);
+		i++;
+	}
+	pthread_create(&dead_check, NULL, &finish_dinner, socrates);
+	pthread_join(dead_check, NULL);
 }
 
 void	init_forks(pthread_mutex_t	*mutexes, int philo_count)
@@ -64,8 +80,7 @@ void	init_forks(pthread_mutex_t	*mutexes, int philo_count)
 	i = 0;
 	while (i < philo_count)
 	{
-		if (pthread_mutex_init(&mutexes[i], NULL))
-			exit(printf("Error!\ncannot create mutex"));
+		pthread_mutex_init(&mutexes[i], NULL);
 		i++;
 	}
 }
