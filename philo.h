@@ -11,6 +11,8 @@ typedef struct s_philo
 {
 	int				philo_id;
 	pthread_t		*philo;
+	pthread_t		*dead_check;
+	pthread_t		*all_ate_thread;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*print_mutex;
@@ -25,7 +27,6 @@ typedef struct s_philo
 	int				philo_count;
 	int				eat_count;
 	uint64_t		now;
-	pthread_t		*dead_check;
 	int				*is_done;
 }				t_philo;
 
@@ -54,6 +55,7 @@ void		print(t_philo *philo, char opt);
 //time
 __uint64_t	get_time(void);
 void		ft_usleep(uint64_t need_to_wait);
-//main
+//finishdinner
 void		*finish_dinner(void *socrates);
+void		*all_ate(void *data);
 #endif

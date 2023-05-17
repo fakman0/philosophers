@@ -51,25 +51,29 @@ void	init_data(int argc, char *argv[], t_philo *philo, int philo_id)
 void	init_threads(pthread_t *thread, int p_count, t_philo **philos, char **a)
 {
 	int			i;
-	pthread_t	dead_check;
+	pthread_t	*dead_check;
+	pthread_t	*all_ate_thread;
 	t_socrates	*socrates;
 
-	i = 0;
+	i = -1;
 	socrates = malloc(sizeof(t_socrates));
+	all_ate_thread = malloc(sizeof(pthread_t));
+	dead_check = malloc(sizeof(pthread_t));
 	socrates->argv = a;
 	socrates->philos = philos;
-	pthread_create(&dead_check, NULL, finish_dinner, socrates);
-	while (i < p_count)
-	{
+	pthread_create(dead_check, NULL, finish_dinner, socrates);
+	pthread_create(all_ate_thread, NULL, all_ate, socrates);
+	while (++i < p_count)
 		pthread_create(&thread[i], NULL, life_cycle, philos[i]);
-		i++;
-	}
-	i = 0;
-	pthread_join(dead_check, NULL);
-	while (i < p_count)
-	{
+	i = -1;
+	pthread_join(*dead_check, NULL);
+	pthread_join(*all_ate_thread, NULL);
+	while (++i < p_count)
 		pthread_join(*(philos[i]->philo), NULL);
-		i++;
+	while (--i >= 0)
+	{
+		philos[i]->all_ate_thread = all_ate_thread;
+		philos[i]->dead_check = dead_check;
 	}
 }
 
