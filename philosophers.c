@@ -13,4 +13,5 @@ int	main(int argc, char *argv[])
 	}
 	philos = init(argc, argv, 0, &is_done);
 	return (0);
+	destroy(philos);
 }

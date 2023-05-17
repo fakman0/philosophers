@@ -1,6 +1,6 @@
 #include "philo.h"
 
-t_philo	**init(int argc, char *argv[], int i, int *is_done)
+t_philo	**init(int argc, char *argv[], uint64_t i, int *is_done)
 {
 	t_philo			**philos;
 	pthread_t		*threads;
@@ -30,11 +30,6 @@ t_philo	**init(int argc, char *argv[], int i, int *is_done)
 
 void	init_data(int argc, char *argv[], t_philo *philo, int philo_id)
 {
-	uint64_t		time_to_die;
-	uint64_t		needle_eat;
-	uint64_t		needle_sleep;
-	uint64_t		must_eat;
-
 	philo->philo_id = philo_id;
 	philo->philo_count = ft_atoi(argv[1]);
 	philo->time_to_die = ft_atoi(argv[2]);

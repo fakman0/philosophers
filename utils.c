@@ -1,10 +1,10 @@
 #include "philo.h"
 
-int	ft_atoi(char *str)
+uint64_t	ft_atoi(char *str)
 {
-	int	nbr;
-	int	i;
-	int	sign;
+	uint64_t	nbr;
+	int			i;
+	int			sign;
 
 	nbr = 0;
 	i = 0;

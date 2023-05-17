@@ -37,7 +37,7 @@ typedef struct s_socrates
 }			t_socrates;
 
 //utils
-int			ft_atoi(char *str);
+uint64_t	ft_atoi(char *str);
 int			ft_isnum(char *num);
 //error_management
 int			controls(int argc, char *argv[]);
@@ -45,7 +45,7 @@ int			controls(int argc, char *argv[]);
 void		*life_cycle(void *nullable);
 void		eating(t_philo *philo);
 //init
-t_philo		**init(int argc, char *argv[], int i, int *is_done);
+t_philo		**init(int argc, char *argv[], uint64_t i, int *is_done);
 void		init_data(int argc, char *argv[], t_philo *philo, int philo_id);
 void		init_threads(pthread_t *t, int p_c, t_philo **philos, char **a);
 void		init_mutexes(pthread_mutex_t *mutex, int ph_c, t_philo **ph, int i);
@@ -58,4 +58,6 @@ void		ft_usleep(uint64_t need_to_wait);
 //finishdinner
 void		*finish_dinner(void *socrates);
 void		*all_ate(void *data);
+//destroy
+void		destroy(t_philo **socrates);
 #endif

@@ -1,14 +1,28 @@
 #include "philo.h"
 
+int	finish_dinner_extra(t_socrates *socrates)
+{
+	pthread_mutex_lock(socrates->philos[0]->is_done_mutex);
+	if (*(socrates->philos[0]->is_done) == 1)
+	{
+		pthread_mutex_unlock(socrates->philos[0]->is_done_mutex);
+		return (1);
+	}
+	pthread_mutex_unlock(socrates->philos[0]->is_done_mutex);
+	return (0);
+}
+
 void	*finish_dinner(void *socrates)
 {
-	int			i;
+	uint64_t	i;
 	t_socrates	*data;
 
 	data = (t_socrates *)socrates;
 	while (1)
 	{
 		i = -1;
+		if (finish_dinner_extra(data))
+			return (NULL);
 		while (++i < ft_atoi(data->argv[1]))
 		{
 			pthread_mutex_lock(data->philos[i]->last_eat_mutex);
@@ -25,7 +39,6 @@ void	*finish_dinner(void *socrates)
 			pthread_mutex_unlock(data->philos[i]->last_eat_mutex);
 		}
 	}
-	return (NULL);
 }
 
 int	all_ate_control(t_philo **philos)
@@ -53,8 +66,10 @@ void	*all_ate(void *data)
 
 	socrates = (t_socrates *)data;
 
+	pthread_mutex_lock(socrates->philos[0]->is_done_mutex);
 	while (*(socrates->philos[0]->is_done) == 0)
 	{
+		pthread_mutex_unlock(socrates->philos[0]->is_done_mutex);
 		if (all_ate_control(socrates->philos) == 1)
 		{
 			pthread_mutex_lock(socrates->philos[0]->is_done_mutex);
@@ -62,6 +77,8 @@ void	*all_ate(void *data)
 			pthread_mutex_unlock(socrates->philos[0]->is_done_mutex);
 			return (NULL);
 		}
+		pthread_mutex_lock(socrates->philos[0]->is_done_mutex);
 	}
+	pthread_mutex_unlock(socrates->philos[0]->is_done_mutex);
 	return (NULL);
 }
