@@ -14,6 +14,7 @@ t_philo	**init(int argc, char *argv[], int i, int *is_done)
 	pthread_mutex_init(&print_mutex, NULL);
 	pthread_mutex_init(&last_eat_mutex, NULL);
 	init_mutexes(mutexes, ft_atoi(argv[1]), philos, ft_atoi(argv[1]));
+	is_done_mutexes(philos, ft_atoi(argv[1]));
 	while (i < ft_atoi(argv[1]))
 	{
 		init_data(argc, argv, philos[i], i);
@@ -23,16 +24,16 @@ t_philo	**init(int argc, char *argv[], int i, int *is_done)
 		philos[i]->is_done = is_done;
 		i++;
 	}
-	init_threads(threads, ft_atoi(argv[1]), philos);
+	init_threads(threads, ft_atoi(argv[1]), philos, argv);
 	return (philos);
 }
 
 void	init_data(int argc, char *argv[], t_philo *philo, int philo_id)
 {
-	long	time_to_die;
-	long	needle_eat;
-	long	needle_sleep;
-	long	must_eat;
+	uint64_t		time_to_die;
+	uint64_t		needle_eat;
+	uint64_t		needle_sleep;
+	uint64_t		must_eat;
 
 	philo->philo_id = philo_id;
 	philo->philo_count = ft_atoi(argv[1]);
@@ -47,17 +48,29 @@ void	init_data(int argc, char *argv[], t_philo *philo, int philo_id)
 		philo->must_eat = ft_atoi(argv[5]);
 }
 
-void	init_threads(pthread_t *thread, int p_count, t_philo **philos)
+void	init_threads(pthread_t *thread, int p_count, t_philo **philos, char **a)
 {
 	int			i;
+	pthread_t	dead_check;
+	t_socrates	*socrates;
 
 	i = 0;
+	socrates = malloc(sizeof(t_socrates));
+	socrates->argv = a;
+	socrates->philos = philos;
+	pthread_create(&dead_check, NULL, finish_dinner, socrates);
 	while (i < p_count)
 	{
 		pthread_create(&thread[i], NULL, life_cycle, philos[i]);
 		i++;
 	}
 	i = 0;
+	pthread_join(dead_check, NULL);
+	while (i < p_count)
+	{
+		pthread_join(*(philos[i]->philo), NULL);
+		i++;
+	}
 }
 
 void	init_mutexes(pthread_mutex_t *mutex, int ph_c, t_philo **ph, int i)
@@ -84,5 +97,20 @@ void	init_mutexes(pthread_mutex_t *mutex, int ph_c, t_philo **ph, int i)
 			ph[i]->r_fork = &(mutex[i]);
 			ph[i]->l_fork = &(mutex[0]);
 		}
+	}
+}
+
+void	is_done_mutexes(t_philo **philos, int philo_count)
+{
+	pthread_mutex_t	*is_done_mutex;
+	int				i;
+
+	is_done_mutex = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(is_done_mutex, NULL);
+	i = 0;
+	while (i < philo_count)
+	{
+		philos[i]->is_done_mutex = is_done_mutex;
+		i++;
 	}
 }

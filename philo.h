@@ -15,6 +15,7 @@ typedef struct s_philo
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*print_mutex;
 	pthread_mutex_t	*last_eat_mutex;
+	pthread_mutex_t	*is_done_mutex;
 	__uint64_t		last_eat;
 	__uint64_t		needle_eat;
 	__uint64_t		needle_sleep;
@@ -45,16 +46,14 @@ void		eating(t_philo *philo);
 //init
 t_philo		**init(int argc, char *argv[], int i, int *is_done);
 void		init_data(int argc, char *argv[], t_philo *philo, int philo_id);
-void		init_threads(pthread_t *t, int p_c, t_philo **philos);
+void		init_threads(pthread_t *t, int p_c, t_philo **philos, char **a);
 void		init_mutexes(pthread_mutex_t *mutex, int ph_c, t_philo **ph, int i);
-void		give_forks(int i, int ph_c, t_philo **ps, pthread_mutex_t *m);
-void		ft_putstr_fd(char *s, int fd);
-void		ft_putnbr_fd(int n, int fd);
+void		is_done_mutexes(t_philo **philos, int philo_count);
+//print
 void		print(t_philo *philo, char opt);
-void		ft_putchar_fd(char c, int fd);
 //time
 __uint64_t	get_time(void);
 void		ft_usleep(uint64_t need_to_wait);
 //main
-int			finish_dinner(t_philo **philos, char **argv);
+void		*finish_dinner(void *socrates);
 #endif
